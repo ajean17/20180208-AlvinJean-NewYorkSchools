@@ -39,6 +39,9 @@ public class HighSchoolListAdapter extends RecyclerView.Adapter<HighSchoolListAd
         HighSchool highSchool = highSchoolList.get(position);
         holder.schoolName.setText(highSchool.getSchoolName());
         holder.schoolDesc.setText(highSchool.getOverviewParagraph());
+        holder.schoolLocation.setText(highSchool.getLocation());
+        holder.schoolGrades.setText(String.format("Grades: %s", highSchool.getGrades2018()));
+        holder.schoolPriority.setText(highSchool.getAdmissionspriority11());
     }
 
     @Override
@@ -54,11 +57,17 @@ public class HighSchoolListAdapter extends RecyclerView.Adapter<HighSchoolListAd
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView schoolName;
         TextView schoolDesc;
+        TextView schoolLocation;
+        TextView schoolGrades;
+        TextView schoolPriority;
 
         public ViewHolder(View itemView) {
             super(itemView);
             schoolName = itemView.findViewById(R.id.tv_high_school_name);
             schoolDesc = itemView.findViewById(R.id.tv_high_school_description);
+            schoolLocation = itemView.findViewById(R.id.tv_high_school_location);
+            schoolGrades = itemView.findViewById(R.id.tv_high_school_grades);
+            schoolPriority = itemView.findViewById(R.id.tv_high_school_priority);
             itemView.setOnClickListener(this);
         }
 

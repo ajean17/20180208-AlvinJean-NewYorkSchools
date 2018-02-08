@@ -6,7 +6,7 @@ import com.example.x5.a20180208_alvinjean_nyschools.utils.BaseView;
 
 public interface SATDetailContract {
     interface View extends BaseView {
-        void initUI(SATScore satScoreInfo);
+        void showScores(SATScore satScoreInfo);
     }
 
     interface Presenter extends BasePresenter<View> {

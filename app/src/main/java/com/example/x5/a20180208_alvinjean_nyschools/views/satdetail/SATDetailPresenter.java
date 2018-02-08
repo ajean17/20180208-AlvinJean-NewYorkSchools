@@ -3,6 +3,7 @@ package com.example.x5.a20180208_alvinjean_nyschools.views.satdetail;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.x5.a20180208_alvinjean_nyschools.R;
 import com.example.x5.a20180208_alvinjean_nyschools.models.HighSchool;
 import com.example.x5.a20180208_alvinjean_nyschools.models.SATScore;
 import com.google.gson.Gson;
@@ -61,12 +62,15 @@ public class SATDetailPresenter implements SATDetailContract.Presenter {
                 Collection<SATScore> enums = gson.fromJson(json, collectionType);
 
                 satScoreList = new ArrayList<>(enums);
+                SATScore scoreToShow = new SATScore();
+                scoreToShow.setSchoolName(context.getString(R.string.lbl_no_sat_info));
                 for(SATScore satScore: satScoreList) {
                     if(satScore.getDbn().equals(highSchoolDBN)){
-                        view.initUI(satScore);
+                        scoreToShow = satScore;
                         break;
                     }
                 }
+                view.showScores(scoreToShow);
             }
         });
         /*DBHelper helper = new DBHelper(context);

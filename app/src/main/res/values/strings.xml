@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">20180208-AlvinJean-NYSchools</string>
+    <string name="lbl_test_takers">Amount of Test Takers:\u0020</string>
+    <string name="lbl_reading_avg">Average Reading Score:\u0020</string>
+    <string name="lbl_math_avg">Average Math Score:\u0020</string>
+    <string name="lbl_writing_avg">Average Writing Score:\u0020</string>
+    <string name="lbl_no_sat_info">NO SAT INFORMATION AVAILABLE</string>
 </resources>
