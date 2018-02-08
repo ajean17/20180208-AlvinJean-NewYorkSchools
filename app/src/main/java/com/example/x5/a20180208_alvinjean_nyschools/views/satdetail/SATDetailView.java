@@ -8,20 +8,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.x5.a20180208_alvinjean_nyschools.R;
+import com.example.x5.a20180208_alvinjean_nyschools.di.components.AppComponent;
+import com.example.x5.a20180208_alvinjean_nyschools.di.components.DaggerAppComponent;
+import com.example.x5.a20180208_alvinjean_nyschools.di.components.DaggerSATDetailComponent;
+import com.example.x5.a20180208_alvinjean_nyschools.di.components.SATDetailComponent;
 import com.example.x5.a20180208_alvinjean_nyschools.models.SATScore;
 import com.example.x5.a20180208_alvinjean_nyschools.views.highschoollist.HighSchoolListView;
+
+import javax.inject.Inject;
 
 
 public class SATDetailView extends AppCompatActivity implements SATDetailContract.View{
     private static final String TAG = SATDetailView.class.getSimpleName() + "_TAG";
-    private SATDetailPresenter presenter;
+
+    @Inject
+    SATDetailPresenter presenter;
     private TextView tvSchoolName, tvNumTaken, tvReadingAVG, tvMathAVG, tvWritingAVG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_satdetail_view);
-        presenter = new SATDetailPresenter(this);
+        AppComponent appComponent = DaggerAppComponent.builder().build();
+        SATDetailComponent component = DaggerSATDetailComponent.builder()
+                .appComponent(appComponent).build();
+        presenter = component.getSATDetailPresenter();
         presenter.attachView(this);
         bindviews();
         Intent intent = getIntent();
@@ -32,6 +43,7 @@ public class SATDetailView extends AppCompatActivity implements SATDetailContrac
     }
 
     private void bindviews() {
+        setTitle("SAT Scores");
         tvSchoolName = (TextView) findViewById(R.id.tv_sat_school_name);
         tvNumTaken = (TextView) findViewById(R.id.tv_sat_num_taken);
         tvReadingAVG = (TextView) findViewById(R.id.tv_sat_reading_avg);

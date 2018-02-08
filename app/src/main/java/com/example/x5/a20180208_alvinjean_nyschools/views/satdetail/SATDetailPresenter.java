@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -24,13 +26,13 @@ import okhttp3.Response;
 public class SATDetailPresenter implements SATDetailContract.Presenter {
     private static final String TAG = SATDetailPresenter.class.getSimpleName() + "_TAG";
     private SATDetailContract.View view;
-    private Context context;
-    private OkHttpClient client;
+    @Inject
+    OkHttpClient client;
     private List<SATScore> satScoreList;
 
-    SATDetailPresenter(Context context) {
-        this.context = context;
-        client = new OkHttpClient();
+    @Inject
+    public SATDetailPresenter(OkHttpClient client) {
+        this.client = client;
     }
 
     @Override
@@ -63,7 +65,7 @@ public class SATDetailPresenter implements SATDetailContract.Presenter {
 
                 satScoreList = new ArrayList<>(enums);
                 SATScore scoreToShow = new SATScore();
-                scoreToShow.setSchoolName(context.getString(R.string.lbl_no_sat_info));
+                scoreToShow.setSchoolName("NO SAT INFORMATION AVAILABLE");
                 for(SATScore satScore: satScoreList) {
                     if(satScore.getDbn().equals(highSchoolDBN)){
                         scoreToShow = satScore;

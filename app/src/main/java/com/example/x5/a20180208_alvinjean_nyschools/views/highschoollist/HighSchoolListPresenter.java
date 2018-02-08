@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -22,11 +24,13 @@ public class HighSchoolListPresenter implements HighSchoolListContract.Presenter
     private static final String TAG = HighSchoolListPresenter.class.getSimpleName() + "_TAG";
     private HighSchoolListContract.View view;
     private List<HighSchool> highSchoolList;
-    private OkHttpClient client;
+    @Inject
+    OkHttpClient client;
     //private SQLiteDatabase database;
 
-    HighSchoolListPresenter(Context context) {
-        client = new OkHttpClient();
+    @Inject
+    public HighSchoolListPresenter(OkHttpClient client) {
+        this.client = client;
         //DBHelper helper = new DBHelper(context);
         //database = helper.getWritableDatabase();
     }
