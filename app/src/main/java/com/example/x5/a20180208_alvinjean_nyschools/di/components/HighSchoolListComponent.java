@@ -9,5 +9,6 @@ import dagger.Component;
 @ActivityScope
 @Component(modules = HighSchoolListModule.class, dependencies = AppComponent.class)
 public interface HighSchoolListComponent {
+    //Activity coupled dependency injection of the following Presenter
     HighSchoolListPresenter getHighSchoolListPresenter();
 }

@@ -1,10 +1,7 @@
 package com.example.x5.a20180208_alvinjean_nyschools.views.satdetail;
 
-import android.content.Context;
 import android.util.Log;
 
-import com.example.x5.a20180208_alvinjean_nyschools.R;
-import com.example.x5.a20180208_alvinjean_nyschools.models.HighSchool;
 import com.example.x5.a20180208_alvinjean_nyschools.models.SATScore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -45,6 +42,7 @@ public class SATDetailPresenter implements SATDetailContract.Presenter {
         this.view = null;
     }
 
+    //Retrieve the SAT Scores from the JSON API URL
     @Override
     public void getSATData(final String highSchoolDBN) {
         Log.d(TAG, "getSATData: Getting DATA FOR SAT DBN: " + highSchoolDBN);
@@ -62,9 +60,11 @@ public class SATDetailPresenter implements SATDetailContract.Presenter {
 
                 Type collectionType = new TypeToken<Collection<SATScore>>(){}.getType();
                 Collection<SATScore> enums = gson.fromJson(json, collectionType);
-
+                //Convert the incoming JSON data into an ArrayList and find the corresponding Scores
                 satScoreList = new ArrayList<>(enums);
                 SATScore scoreToShow = new SATScore();
+                //Find the SAT scores based on the DBN of the school selected
+                //If nothing is found, notify the user in the UI
                 scoreToShow.setSchoolName("NO SAT INFORMATION AVAILABLE");
                 for(SATScore satScore: satScoreList) {
                     if(satScore.getDbn().equals(highSchoolDBN)){
@@ -75,39 +75,5 @@ public class SATDetailPresenter implements SATDetailContract.Presenter {
                 view.showScores(scoreToShow);
             }
         });
-        /*DBHelper helper = new DBHelper(context);
-        SQLiteDatabase database = helper.getWritableDatabase();
-        String[] projection = {
-                FeedEntry._ID,
-                FeedEntry.COLUMN_NAME_DBN,
-                FeedEntry.COLUMN_NAME_NUM_TAKERS,
-                FeedEntry.COLUMN_NAME_READING_AVG,
-                FeedEntry.COLUMN_NAME_MATH_AVG,
-                FeedEntry.COLUMN_NAME_WRITING_AVG,
-                FeedEntry.COLUMN_SCHOOL_NAME
-        };
-        String selection = FeedEntry.COLUMN_NAME_DBN + " = ?";
-        String[] selectionArgs = {highSchoolDBN};
-        Cursor cursor = database.query( //**Requires 7 parameters**
-                FeedEntry.TABLE_NAME,   //Table
-                projection,             //Projection
-                selection,                   //Selection (WHERE)
-                selectionArgs,                   //Values for selection
-                null,                   //Group by
-                null,                   //Filters
-                null                    //Sort Order
-        );
-        SATScore entrySATScore = new SATScore();
-        while(cursor.moveToNext()) {
-            entrySATScore.setDbn(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_DBN)));
-            entrySATScore.setNumOfSatTestTakers(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_NUM_TAKERS)));
-            entrySATScore.setSatCriticalReadingAvgScore(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_READING_AVG)));
-            entrySATScore.setSatMathAvgScore(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_MATH_AVG)));
-            entrySATScore.setSatWritingAvgScore(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_WRITING_AVG)));
-            entrySATScore.setSchoolName(cursor.getString(cursor.getColumnIndexOrThrow(FeedEntry.COLUMN_SCHOOL_NAME)));
-        }
-        Log.d(TAG, "getSATData: SATScoreInfo = " + entrySATScore.toString());
-        view.initUI(entrySATScore);
-        cursor.close();*/
     }
 }

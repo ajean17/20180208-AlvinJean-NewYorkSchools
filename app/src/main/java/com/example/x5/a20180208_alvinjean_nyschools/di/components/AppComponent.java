@@ -13,5 +13,6 @@ import okhttp3.OkHttpClient;
 @AppScope
 @Component(modules = {NetworkModule.class})
 public interface AppComponent {
+    //Application wide dependancy injection of OKHttp
     OkHttpClient getOkHttpClient();
 }

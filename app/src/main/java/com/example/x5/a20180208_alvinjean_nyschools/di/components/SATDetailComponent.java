@@ -9,5 +9,6 @@ import dagger.Component;
 @ActivityScope
 @Component(modules = SATDetailModule.class, dependencies = AppComponent.class)
 public interface SATDetailComponent {
+    //Activity coupled dependency injection of the following Presenter
     SATDetailPresenter getSATDetailPresenter();
 }

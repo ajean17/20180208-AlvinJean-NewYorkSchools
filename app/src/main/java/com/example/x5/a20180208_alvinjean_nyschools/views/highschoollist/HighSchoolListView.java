@@ -39,9 +39,8 @@ public class HighSchoolListView extends AppCompatActivity implements HighSchoolL
         presenter = component.getHighSchoolListPresenter();
         presenter.attachView(this);
         setUpRecyclerView();
-        //presenter.getSATScores();
         presenter.getHighSchools();
-    }git
+    }
 
     private void setUpRecyclerView() {
         highSchoolListAdapter = new HighSchoolListAdapter(this);
