@@ -12,6 +12,7 @@ import com.example.x5.a20180208_alvinjean_nyschools.di.components.AppComponent;
 import com.example.x5.a20180208_alvinjean_nyschools.di.components.DaggerAppComponent;
 import com.example.x5.a20180208_alvinjean_nyschools.di.components.DaggerSATDetailComponent;
 import com.example.x5.a20180208_alvinjean_nyschools.di.components.SATDetailComponent;
+import com.example.x5.a20180208_alvinjean_nyschools.di.modules.ContextModule;
 import com.example.x5.a20180208_alvinjean_nyschools.models.SATScore;
 import com.example.x5.a20180208_alvinjean_nyschools.views.highschoollist.HighSchoolListView;
 
@@ -29,10 +30,12 @@ public class SATDetailView extends AppCompatActivity implements SATDetailContrac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_satdetail_view);
-        AppComponent appComponent = DaggerAppComponent.builder().build();
+        AppComponent appComponent = DaggerAppComponent.builder()
+                .contextModule(new ContextModule(this)).build();
         SATDetailComponent component = DaggerSATDetailComponent.builder()
                 .appComponent(appComponent).build();
-        presenter = component.getSATDetailPresenter();
+        //presenter = component.getSATDetailPresenter();
+        component.injectSATDetailView(this);
         presenter.attachView(this);
         bindviews();
         Intent intent = getIntent();

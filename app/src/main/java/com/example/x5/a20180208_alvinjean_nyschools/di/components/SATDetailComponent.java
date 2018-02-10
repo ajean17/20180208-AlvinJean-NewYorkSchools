@@ -3,6 +3,7 @@ package com.example.x5.a20180208_alvinjean_nyschools.di.components;
 import com.example.x5.a20180208_alvinjean_nyschools.di.modules.SATDetailModule;
 import com.example.x5.a20180208_alvinjean_nyschools.di.scope.ActivityScope;
 import com.example.x5.a20180208_alvinjean_nyschools.views.satdetail.SATDetailPresenter;
+import com.example.x5.a20180208_alvinjean_nyschools.views.satdetail.SATDetailView;
 
 import dagger.Component;
 
@@ -10,5 +11,7 @@ import dagger.Component;
 @Component(modules = SATDetailModule.class, dependencies = AppComponent.class)
 public interface SATDetailComponent {
     //Activity coupled dependency injection of the following Presenter
-    SATDetailPresenter getSATDetailPresenter();
+    //SATDetailPresenter getSATDetailPresenter();
+
+    void injectSATDetailView(SATDetailView satDetailView);
 }

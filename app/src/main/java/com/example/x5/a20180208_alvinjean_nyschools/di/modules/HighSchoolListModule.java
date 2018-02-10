@@ -12,9 +12,21 @@ import okhttp3.OkHttpClient;
 @Module
 public class HighSchoolListModule {
 
-    @Provides
+    /*@Provides
     @ActivityScope
     public HighSchoolListPresenter highSchoolListPresenter(OkHttpClient client) {
         return new HighSchoolListPresenter(client);
+    }*/
+
+    private final HighSchoolListView highSchoolListView;
+
+    public HighSchoolListModule(HighSchoolListView highSchoolListView) {
+        this.highSchoolListView = highSchoolListView;
+    }
+
+    @Provides
+    @ActivityScope
+    public HighSchoolListView highSchoolListView() {
+        return highSchoolListView;
     }
 }

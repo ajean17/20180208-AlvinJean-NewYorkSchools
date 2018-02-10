@@ -13,6 +13,7 @@ import com.example.x5.a20180208_alvinjean_nyschools.di.components.AppComponent;
 import com.example.x5.a20180208_alvinjean_nyschools.di.components.DaggerAppComponent;
 import com.example.x5.a20180208_alvinjean_nyschools.di.components.DaggerHighSchoolListComponent;
 import com.example.x5.a20180208_alvinjean_nyschools.di.components.HighSchoolListComponent;
+import com.example.x5.a20180208_alvinjean_nyschools.di.modules.ContextModule;
 import com.example.x5.a20180208_alvinjean_nyschools.models.HighSchool;
 import com.example.x5.a20180208_alvinjean_nyschools.views.satdetail.SATDetailView;
 
@@ -33,10 +34,12 @@ public class HighSchoolListView extends AppCompatActivity implements HighSchoolL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("New York High Schools");
-        AppComponent appComponent = DaggerAppComponent.builder().build();
+        AppComponent appComponent = DaggerAppComponent.builder()
+                .contextModule(new ContextModule(this)).build();
         HighSchoolListComponent component = DaggerHighSchoolListComponent.builder()
                 .appComponent(appComponent).build();
-        presenter = component.getHighSchoolListPresenter();
+        //presenter = component.getHighSchoolListPresenter();
+        component.injectHighSchoolListView(this);
         presenter.attachView(this);
         setUpRecyclerView();
         presenter.getHighSchools();

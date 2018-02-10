@@ -1,7 +1,10 @@
 package com.example.x5.a20180208_alvinjean_nyschools.views.satdetail;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.example.x5.a20180208_alvinjean_nyschools.data.RemoteAPI;
+import com.example.x5.a20180208_alvinjean_nyschools.data.RemoteDataProvider;
 import com.example.x5.a20180208_alvinjean_nyschools.models.SATScore;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -9,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,17 +23,17 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import retrofit2.Retrofit;
 
 public class SATDetailPresenter implements SATDetailContract.Presenter {
     private static final String TAG = SATDetailPresenter.class.getSimpleName() + "_TAG";
     private SATDetailContract.View view;
-    @Inject
-    OkHttpClient client;
+    RemoteDataProvider remoteDataProvider;
     private List<SATScore> satScoreList;
 
     @Inject
-    public SATDetailPresenter(OkHttpClient client) {
-        this.client = client;
+    public SATDetailPresenter(RemoteDataProvider remoteDataProvider) {
+        this.remoteDataProvider = remoteDataProvider;
     }
 
     @Override
@@ -45,34 +49,31 @@ public class SATDetailPresenter implements SATDetailContract.Presenter {
     //Retrieve the SAT Scores from the JSON API URL
     @Override
     public void getSATData(final String highSchoolDBN) {
-        Log.d(TAG, "getSATData: Getting DATA FOR SAT DBN: " + highSchoolDBN);
-        final Request request = new Request.Builder().url("https://data.cityofnewyork.us/resource/734v-jeq5.json").build();
-        client.newCall(request).enqueue(new Callback() {
+        Retrofit retrofit = remoteDataProvider.create();
+        final RemoteAPI remoteAPI = retrofit.create(RemoteAPI.class);
+        retrofit2.Call<SATScore[]> call = remoteAPI.getSATScores("734v-jeq5");
+        call.enqueue(new retrofit2.Callback<SATScore[]>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+            public void onResponse(@NonNull retrofit2.Call<SATScore[]> call, @NonNull retrofit2.Response<SATScore[]> response) {
+                if(response.body() != null) {
+                    satScoreList = new ArrayList<>(Arrays.asList(response.body()));
+                    SATScore scoreToShow = new SATScore();
+                    //Find the SAT scores based on the DBN of the school selected
+                    //If nothing is found, notify the user in the UI
+                    scoreToShow.setSchoolName("NO SAT INFORMATION AVAILABLE");
+                    for(SATScore satScore: satScoreList) {
+                        if(satScore.getDbn().equals(highSchoolDBN)){
+                            scoreToShow = satScore;
+                            break;
+                        }
+                    }
+                    view.showScores(scoreToShow);
+                }
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String json = response.body().string();
-                Gson gson = new Gson();
+            public void onFailure(@NonNull retrofit2.Call<SATScore[]> call, @NonNull Throwable t) {
 
-                Type collectionType = new TypeToken<Collection<SATScore>>(){}.getType();
-                Collection<SATScore> enums = gson.fromJson(json, collectionType);
-                //Convert the incoming JSON data into an ArrayList and find the corresponding Scores
-                satScoreList = new ArrayList<>(enums);
-                SATScore scoreToShow = new SATScore();
-                //Find the SAT scores based on the DBN of the school selected
-                //If nothing is found, notify the user in the UI
-                scoreToShow.setSchoolName("NO SAT INFORMATION AVAILABLE");
-                for(SATScore satScore: satScoreList) {
-                    if(satScore.getDbn().equals(highSchoolDBN)){
-                        scoreToShow = satScore;
-                        break;
-                    }
-                }
-                view.showScores(scoreToShow);
             }
         });
     }

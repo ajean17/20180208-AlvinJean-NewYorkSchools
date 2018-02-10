@@ -1,5 +1,6 @@
 package com.example.x5.a20180208_alvinjean_nyschools.di.components;
 
+import com.example.x5.a20180208_alvinjean_nyschools.data.RemoteDataProvider;
 import com.example.x5.a20180208_alvinjean_nyschools.di.modules.HighSchoolListModule;
 import com.example.x5.a20180208_alvinjean_nyschools.di.modules.NetworkModule;
 import com.example.x5.a20180208_alvinjean_nyschools.di.modules.SATDetailModule;
@@ -14,5 +15,6 @@ import okhttp3.OkHttpClient;
 @Component(modules = {NetworkModule.class})
 public interface AppComponent {
     //Application wide dependancy injection of OKHttp
-    OkHttpClient getOkHttpClient();
+    //OkHttpClient getOkHttpClient();
+    RemoteDataProvider getRemoteDataProvider();
 }
