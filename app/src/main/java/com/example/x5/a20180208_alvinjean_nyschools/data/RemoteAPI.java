@@ -12,12 +12,6 @@ import retrofit2.http.Path;
 public interface RemoteAPI {
 
     @GET("{path}.json")
-    Call<HighSchool[]> getNewYorkHighSchools(@Path("path") String path);
-
-    @GET("{path}.json")
-    Call<SATScore[]> getSATScores(@Path("path") String path);
-
-    @GET("{path}.json")
     Observable<HighSchool[]> getHighSchoolsOberservable(@Path("path") String path);
 
     @GET("{path}.json")

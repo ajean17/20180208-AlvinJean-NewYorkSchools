@@ -10,9 +10,11 @@ import com.example.x5.a20180208_alvinjean_nyschools.di.components.DaggerSATDetai
 import com.example.x5.a20180208_alvinjean_nyschools.di.components.HighSchoolListComponent;
 import com.example.x5.a20180208_alvinjean_nyschools.di.components.SATDetailComponent;
 import com.example.x5.a20180208_alvinjean_nyschools.di.modules.ContextModule;
+import com.example.x5.a20180208_alvinjean_nyschools.di.modules.NetworkModule;
 
 public class HighSchoolAppication extends Application {
 
+    private static final String BASE_URL = "https://data.cityofnewyork.us/resource/";
     private AppComponent appComponent;
     private HighSchoolListComponent highSchoolListComponent;
     private SATDetailComponent satDetailComponent;
@@ -22,8 +24,11 @@ public class HighSchoolAppication extends Application {
         super.onCreate();
 
         ContextModule contextModule = new ContextModule(getApplicationContext());
+        NetworkModule networkModule = new NetworkModule(BASE_URL);
         appComponent = DaggerAppComponent.builder()
-                .contextModule(contextModule).build();
+                .contextModule(contextModule)
+                .networkModule(networkModule)
+                .build();
     }
 
     public static HighSchoolAppication getAppComponent(Context context) {

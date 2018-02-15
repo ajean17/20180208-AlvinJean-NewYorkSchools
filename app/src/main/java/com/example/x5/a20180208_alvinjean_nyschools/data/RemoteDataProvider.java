@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.example.x5.a20180208_alvinjean_nyschools.models.HighSchool;
 import com.example.x5.a20180208_alvinjean_nyschools.models.SATScore;
-import com.google.gson.Gson;
 
 import io.reactivex.Observable;
 import okhttp3.Cache;
@@ -16,46 +15,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RemoteDataProvider {
 
-    //String path;
-    Context context;
+    private Retrofit retrofit;
+    private static final String HIGH_SCHOOL_PATH = "97mf-9njv";
+    private static final String SAT_SCORE_PATH = "734v-jeq5";
 
-    public RemoteDataProvider(Context context) {
-        //this.path = path;
-        this.context = context;
-    }
-
-    public Retrofit create() {
-        int cacheSize = 10 * 1024 * 1024;
-        Cache cache = new Cache(context.getCacheDir(), cacheSize);
-
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .cache(cache)
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://data.cityofnewyork.us/resource/")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
-
-        return retrofit;
+    public RemoteDataProvider(Retrofit retrofit) {
+        this.retrofit = retrofit;
     }
 
     public Observable<HighSchool[]> getHighSchoolArray() {
-        Retrofit retrofit = create();
         RemoteAPI remoteAPI = retrofit.create(RemoteAPI.class);
-        return remoteAPI.getHighSchoolsOberservable("97mf-9njv");
+        return remoteAPI.getHighSchoolsOberservable(HIGH_SCHOOL_PATH);
     }
 
     public Observable<SATScore[]> getSATScoreArray() {
-        Retrofit retrofit = create();
         RemoteAPI remoteAPI = retrofit.create(RemoteAPI.class);
-        return remoteAPI.getSATScoreObervable("734v-jeq5");
+        return remoteAPI.getSATScoreObervable(SAT_SCORE_PATH);
     }
 
 }

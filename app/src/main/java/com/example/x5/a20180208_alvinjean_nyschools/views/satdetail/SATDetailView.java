@@ -61,12 +61,10 @@ public class SATDetailView extends AppCompatActivity implements SATDetailContrac
             @Override
             public void run() {
                 tvSchoolName.setText(satScoreInfo.getSchoolName());
-                if(!satScoreInfo.getSchoolName().equals(getString(R.string.lbl_no_sat_info))) {
-                    tvNumTaken.setText(String.format("%s%s", getString(R.string.lbl_test_takers), satScoreInfo.getNumOfSatTestTakers()));
-                    tvReadingAVG.setText(String.format("%s%s", getString(R.string.lbl_reading_avg), satScoreInfo.getSatCriticalReadingAvgScore()));
-                    tvMathAVG.setText(String.format("%s%s", getString(R.string.lbl_math_avg), satScoreInfo.getSatMathAvgScore()));
-                    tvWritingAVG.setText(String.format("%s%s", getString(R.string.lbl_writing_avg), satScoreInfo.getSatWritingAvgScore()));
-                }
+                tvNumTaken.setText(String.format("%s%s", getString(R.string.lbl_test_takers), satScoreInfo.getNumOfSatTestTakers()));
+                tvReadingAVG.setText(String.format("%s%s", getString(R.string.lbl_reading_avg), satScoreInfo.getSatCriticalReadingAvgScore()));
+                tvMathAVG.setText(String.format("%s%s", getString(R.string.lbl_math_avg), satScoreInfo.getSatMathAvgScore()));
+                tvWritingAVG.setText(String.format("%s%s", getString(R.string.lbl_writing_avg), satScoreInfo.getSatWritingAvgScore()));
             }
         });
     }
