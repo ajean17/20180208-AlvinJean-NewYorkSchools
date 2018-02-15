@@ -18,6 +18,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -49,7 +52,7 @@ public class SATDetailPresenter implements SATDetailContract.Presenter {
     //Retrieve the SAT Scores from the JSON API URL
     @Override
     public void getSATData(final String highSchoolDBN) {
-        Retrofit retrofit = remoteDataProvider.create();
+        /*Retrofit retrofit = remoteDataProvider.create();
         final RemoteAPI remoteAPI = retrofit.create(RemoteAPI.class);
         retrofit2.Call<SATScore[]> call = remoteAPI.getSATScores("734v-jeq5");
         call.enqueue(new retrofit2.Callback<SATScore[]>() {
@@ -75,6 +78,42 @@ public class SATDetailPresenter implements SATDetailContract.Presenter {
             public void onFailure(@NonNull retrofit2.Call<SATScore[]> call, @NonNull Throwable t) {
 
             }
-        });
+        });*/
+
+
+        Observer<SATScore[]> observer = new Observer<SATScore[]>() {
+            SATScore scoreToShow = new SATScore();
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.d(TAG, "onSubscribe: ");
+                scoreToShow.setSchoolName("NO SAT INFORMATION AVAILABLE");
+            }
+
+            @Override
+            public void onNext(SATScore[] satScores) {
+                Log.d(TAG, "onNext: ");
+                satScoreList = new ArrayList<>(Arrays.asList(satScores));
+                for(SATScore satScore: satScoreList) {
+                    if(satScore.getDbn().equals(highSchoolDBN)){
+                        scoreToShow = satScore;
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError: ");
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "onComplete: ");
+                view.showScores(scoreToShow);
+            }
+        };
+
+        remoteDataProvider.getSATScoreArray()
+                .subscribe(observer);
     }
 }

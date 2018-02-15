@@ -7,12 +7,8 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.x5.a20180208_alvinjean_nyschools.HighSchoolAppication;
 import com.example.x5.a20180208_alvinjean_nyschools.R;
-import com.example.x5.a20180208_alvinjean_nyschools.di.components.AppComponent;
-import com.example.x5.a20180208_alvinjean_nyschools.di.components.DaggerAppComponent;
-import com.example.x5.a20180208_alvinjean_nyschools.di.components.DaggerSATDetailComponent;
-import com.example.x5.a20180208_alvinjean_nyschools.di.components.SATDetailComponent;
-import com.example.x5.a20180208_alvinjean_nyschools.di.modules.ContextModule;
 import com.example.x5.a20180208_alvinjean_nyschools.models.SATScore;
 import com.example.x5.a20180208_alvinjean_nyschools.views.highschoollist.HighSchoolListView;
 
@@ -30,12 +26,7 @@ public class SATDetailView extends AppCompatActivity implements SATDetailContrac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_satdetail_view);
-        AppComponent appComponent = DaggerAppComponent.builder()
-                .contextModule(new ContextModule(this)).build();
-        SATDetailComponent component = DaggerSATDetailComponent.builder()
-                .appComponent(appComponent).build();
-        //presenter = component.getSATDetailPresenter();
-        component.injectSATDetailView(this);
+        initDaggerComponent();
         presenter.attachView(this);
         bindviews();
         Intent intent = getIntent();
@@ -43,6 +34,10 @@ public class SATDetailView extends AppCompatActivity implements SATDetailContrac
             if(intent.hasExtra(HighSchoolListView.HIGH_SCHOOL_LIST_EXTRA))
                 presenter.getSATData(intent.getStringExtra(HighSchoolListView.HIGH_SCHOOL_LIST_EXTRA));
         }
+    }
+
+    private void initDaggerComponent() {
+        HighSchoolAppication.getAppComponent(this).getSatDetailComponent().injectSATDetailView(this);
     }
 
     private void bindviews() {
@@ -78,7 +73,8 @@ public class SATDetailView extends AppCompatActivity implements SATDetailContrac
 
     @Override
     protected void onDestroy() {
-        presenter.detachView();
         super.onDestroy();
+        presenter.detachView();
+        HighSchoolAppication.getAppComponent(this).clearSATDetailComponent();
     }
 }
