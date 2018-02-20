@@ -6,12 +6,8 @@ import com.example.x5.a20180208_alvinjean_nyschools.models.HighSchool;
 import com.example.x5.a20180208_alvinjean_nyschools.models.SATScore;
 
 import io.reactivex.Observable;
-import okhttp3.Cache;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class RemoteDataProvider {
 
